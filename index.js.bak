@@ -25,6 +25,7 @@ client.connect(err => {
     const orders = req.body;
     ordersCollection.insertOne(orders)
     .then(result=>{
+        console.log(result)
         res.send(result.acknowledged);
 
     })
@@ -33,26 +34,29 @@ client.connect(err => {
     const admin = req.body;
     adminsCollection.insertOne(admin)
     .then(result=>{
+        console.log(result)
         res.send(result.acknowledged);
 
     })
   }) 
   
-  // app.get('/', (req,res)=>{
-  //   const emailAdmin = req.query.email;
-	// console.log(emailAdmin);
-  //   adminsCollection.find(emailAdmin)
-  //   .toArray((err,documents)=>{
-  //       console.log(documents)
-  //       res.send(documents.acknowledged);
+  app.get('/checkAdmins', (req,res)=>{
+    const emailAdmin = req.query.email;
+	console.log(emailAdmin);
+    adminsCollection.find(emailAdmin)
+    .toArray((err,documents)=>{
+        console.log(documents)
+        res.send(documents.acknowledged);
 
-  //   })
-  // })
+    })
+  })
   
   app.post('/postReviews', (req,res)=>{
     const revew = req.body;
+    console.log(revew)
     reviewsCollection.insertOne(revew)
     .then(result=>{
+        console.log(result)
         res.send(result.acknowledged);
 
     })
@@ -79,34 +83,6 @@ client.connect(err => {
       res.send(documents);
   })
   })
-  
-  app.get('/checkAdmins', (req,res)=>{
-    const email = req.query.email;
-  adminsCollection.find({email})
-    .toArray((err,documents)=>{
-      res.send(documents);
-  })
-  })
-
-  app.put('/orderLists', (req, res) => {
-    const updatedStutas = req.body.name;
-    const updatedStutasId = req.body.id;
-    console.log(updatedStutas,updatedStutasId);
-
-    ordersCollection.findOneAndUpdate(
-      { "_id" : updatedStutasId },
-      { $inc: { "points" : 5 } }
-   )
-
-  })
-
-  //   var myquery = { _id: updatedStutasId };
-  // var newvalues = {$set: {stutas: updatedStutas} };
-  // ordersCollection.updateOne(myquery, newvalues, function(err, res) {
-  //   if (err) throw err;
-  //   console.log("1 document updated");
-  // });
-  // })
 
   console.log("database connected properly!!");
 });
